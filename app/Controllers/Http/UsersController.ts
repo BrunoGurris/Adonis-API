@@ -1,14 +1,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import UsersService from 'App/Services/UsersService'
-const usersService = new UsersService
 
 export default class UsersController {
 
-  // private usersService = new UsersService
+  private usersService = new UsersService()
 
-  // constructor (usersService: UsersService) {
-  //   this.usersService = usersService
-  // }
 
   public async get() {
     return {
@@ -16,16 +12,18 @@ export default class UsersController {
     }
   }
 
+
   public async store({ request, response }: HttpContextContract) {
-    return usersService.store(request, response)
-
-
-
-    // response.status(201)
-    // return {
-    //   status: 'success',
-    //   user: user
-    // }
+    try {
+      const body = request.body()
+      return this.usersService.store(response, body)
+    }
+    catch (e) {
+      return {
+        status: 'error',
+        message: 'Não foi possível criar o usuário!'
+      }
+    }
   }
 
 }
