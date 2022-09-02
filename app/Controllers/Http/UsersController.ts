@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import User from 'App/Models/User'
 import UsersService from 'App/Services/UsersService'
 
 export default class UsersController {
@@ -6,10 +7,12 @@ export default class UsersController {
   private usersService = new UsersService()
 
 
-  public async get() {
-    return {
-      data: 'asdasd'
-    }
+  public async get({ response }: HttpContextContract) {
+    const users = await User.all()
+
+    response.status(200).send({
+      users: users
+    })
   }
 
 
